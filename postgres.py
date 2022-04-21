@@ -13,6 +13,7 @@ class Postgres:
     # creates a record in PostgreSQL events table
     # name (varchar), description (varchar), meta (json), result (json), created_at (timestamp)
     def create_record(self, meta, output_video):
+        connection = None
         try:
             connection = psycopg2.connect(
                 host=self.host,
