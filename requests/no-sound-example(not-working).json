@@ -1,16 +1,5 @@
 {
 "video_urls": [
-    "https://samplelib.com/lib/preview/mp4/sample-5s.mp4",
-    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
-],
-"width": 640,
-"height": 480,
-"fps": 25
-}
-
-# does not work atm because provided videos have no sound
-{
-"video_urls": [
     "https://cdn.videvo.net/videvo_files/video/premium/getty_105/large_watermarked/istock-1083459308_preview.mp4",
     "https://cdn.videvo.net/videvo_files/video/free/2014-06/large_watermarked/Blue_Sky_and_Clouds_Timelapse_0892__Videvo_preview.mp4",
     "https://cdn.videvo.net/videvo_files/video/premium/video0307/large_watermarked/601-2_601-7633_preview.mp4",
@@ -23,5 +12,3 @@
 "height": 480,
 "fps": 25
 }
-
-

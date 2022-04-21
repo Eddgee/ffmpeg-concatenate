@@ -1,0 +1,9 @@
+{
+"video_urls": [
+    "https://samplelib.com/lib/preview/mp4/sample-5s.mp4",
+    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
+],
+"width": 640,
+"height": 480,
+"fps": 25
+}
