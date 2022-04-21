@@ -1,16 +1,16 @@
 from flask import Flask, request
 import asyncio
 import os
-import s3
-import downloader
+
+from downloader import Downloader
 import ffmpegprocess
-import postgres
+from s3 import S3
+from postgres import Postgres
 
 from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 
 @app.route('/video/', methods=['POST'])
@@ -29,14 +29,29 @@ def video():
     height = request_data["height"]
     fps = request_data["fps"]
 
-    bucket = os.getenv("BUCKET")
 
-    video_names = asyncio.run(downloader.download(video_urls))[1]
+
+    dl = Downloader(max_tasks = 50, max_time = 999)
+    video_names = dl.async_download(video_urls)
+
     output_video = ffmpegprocess.concatenate(video_names, width, height, fps)
-    s3.upload(output_video, bucket)
-    postgres.create_record(request_data, output_video)
-    cleanup(video_names, output_video)
 
+    s3 = S3(
+        bucket = os.getenv("BUCKET"),
+        aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+        aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY")
+    )
+    s3.upload(output_video)
+
+    postgres = Postgres(
+        host = os.getenv("HOST"),
+        user = os.getenv("USER"),
+        password = os.getenv("PASSWORD"),
+        database = os.getenv("DB_NAME")
+    )
+    postgres.create_record(request_data, output_video)
+
+    cleanup(video_names, output_video)
     return "Success!"
 
 
