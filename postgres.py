@@ -12,7 +12,7 @@ class Postgres:
 
     # creates a record in PostgreSQL events table
     # name (varchar), description (varchar), meta (json), result (json), created_at (timestamp)
-    def create_record(self, meta, output_video):
+    def create_event_record(self, name, description, meta, result):
         connection = None
         try:
             connection = psycopg2.connect(
@@ -25,8 +25,8 @@ class Postgres:
 
             with connection.cursor() as cursor:
                 cursor.execute(
-                    f"""INSERT INTO events VALUES ('Video concatenation', '', '{json.dumps(meta)}',
-                    '{json.dumps({"link": f"https://ffmpeg-video-examples.s3.amazonaws.com/{output_video}"})}',
+                    f"""INSERT INTO events VALUES ('{name}', '{description}', '{json.dumps(meta)}',
+                    '{json.dumps({"link": f'{result}'})}',
                     '{datetime.now()}');"""
                 )
         except Exception as e:

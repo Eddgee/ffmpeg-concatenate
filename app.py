@@ -28,6 +28,7 @@ def video():
     width = request_data["width"]
     height = request_data["height"]
     fps = request_data["fps"]
+    bucket = os.getenv("BUCKET")
 
 
 
@@ -37,7 +38,7 @@ def video():
     output_video = ffmpegprocess.concatenate(video_names, width, height, fps)
 
     s3 = S3(
-        bucket = os.getenv("BUCKET"),
+        bucket = bucket,
         aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
         aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY")
     )
@@ -49,7 +50,10 @@ def video():
         password = os.getenv("PASSWORD"),
         database = os.getenv("DB_NAME")
     )
-    postgres.create_record(request_data, output_video)
+    name = "Video concatenation"
+    description = ""
+    result = f"https://{bucket}.s3.amazonaws.com/{output_video}"
+    postgres.create_event_record(name, description, request_data, result)
 
     cleanup(video_names, output_video)
     return "Success!"
